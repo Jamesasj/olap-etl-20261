@@ -11,20 +11,21 @@ from airflow.sdk import task
 def my_sample_dag():
     
     @task
-    def do_my_task_1():
-        response = requests.get('https://jsonplaceholder.typicode.com/users')
-        print(response)
+    def obter_usuarios():
+        r = requests.get('https://jsonplaceholder.typicode.com/users')
+        print('executed task 1')
+        return r.json()
 
     @task
-    def do_my_task_2():
-        print('faz alguma coisa')
+    def do_my_task_2(users):
+        print('do_my_task_2 executed')
 
     @task
     def do_my_task_3():
         print('faz alguma coisa')
 
-    my_task_1 = do_my_task_1()
-    my_task_2 = do_my_task_2()
+    my_task_1 = obter_usuarios()
+    my_task_2 = do_my_task_2(my_task_1)
     my_task_3 = do_my_task_3()
 
     my_task_1 >> my_task_2 
